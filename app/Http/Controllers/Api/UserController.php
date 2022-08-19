@@ -56,27 +56,26 @@ class UserController extends Controller
      * @throws \Exception
      */
     public function register(Request $request)
-    { {
-            $this->validate($request, [
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class),],
-                'password' => ['required', 'min:8'],
-                'role' => ['required'],
-            ]);
+    {
+        $this->validate($request, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class),],
+            'password' => ['required', 'min:8'],
+            'role' => ['required'],
+        ]);
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'role' => $request->role,
-                'password' => bcrypt($request->password)
-            ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => bcrypt($request->password)
+        ]);
 
-            $token = $user->createToken('myAppToken');
+        $token = $user->createToken('myAppToken');
 
-            return (new UserResource($user))->additional([
-                'token' => $token->plainTextToken,
-            ]);
-        }
+        return (new UserResource($user))->additional([
+            'token' => $token->plainTextToken,
+        ]);
     }
 
     public function logout(Request $request)
